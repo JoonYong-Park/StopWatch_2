@@ -11,6 +11,7 @@ android {
         applicationId = "com.example.stopwatch_2"
         minSdk = 23 // 23
         //24에서 변경
+
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"

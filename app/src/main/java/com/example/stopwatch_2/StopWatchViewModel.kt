@@ -6,31 +6,43 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class StopWatchViewM : ViewModel() {
+class StopWatchViewModel : ViewModel() {
     var time = mutableStateOf("00")                  // 시간을 저장하는 변수
     var sec = mutableStateOf("00")                   // 시간을 저장하는 변수
     var min = mutableStateOf("00")                   // 시간을 저장하는 변수
-    var start = mutableStateOf("시작")                // 시작/정지를 저장하는 변수
-    var reset = mutableStateOf("초기화")              // 시작/정지를 저장하는 변수
+
+    var mode = mutableStateOf(true)                 // 시간/랩타임을 저장하는 변수
+    // var start = mutableStateOf("시작")               // 시작/정지를 저장하는 변수
+    // var reset = mutableStateOf("초기화")
+
+    var start = "시작"
+    var reset = "초기화"
+
+                  // 시작/정지를 저장하는 변수
+
+
     var list : MutableList<String> = mutableListOf()       // 랩타임을 저장하는 리스트
     var cnt = mutableStateOf(0)                      // 랩타임을 저장하는 리스트
-    //val result = list.joinToString(separator = ", ")     // 리스트를 문자열로 변환
 
+    // 레코드 리스트 사용
 
     fun stopwatch() {
-        if (start.value == "시작") {
-            start.value = "정지"
-            reset.value = "랩"
+        if (mode.value == true) {
+            start = "정지"
+            reset = "랩"
+            mode.value = false
         } else {
-            start.value = "시작"
-            reset.value = "초기화"
+            start = "시작"
+            reset = "초기화"
+            mode.value = true
         }
         viewModelScope.launch {     // 필요할때만 실행을하는 코루틴
             while (true) {
-                if(start.value == "시작") break;      // 정지 버튼 누르면 while문 탈출
+                if(start == "시작") break;      // 정지 버튼 누르면 while문 탈출
 
                 delay(10)
                 time.value = (time.value.toInt()+1).toString()
+
                 if(time.value.toInt() < 10) {
                     time.value = "0"+time.value
                 }
@@ -54,7 +66,7 @@ class StopWatchViewM : ViewModel() {
     }
 
     fun reset() {
-        if(reset.value == "초기화") {
+        if(mode.value == true) {
             time.value = "00"
             sec.value = "00"
             min.value = "00"
@@ -62,11 +74,9 @@ class StopWatchViewM : ViewModel() {
             list.clear()
         }
 
-        else if(reset.value == "랩") {
+        else if(mode.value == false) {
             cnt.value = cnt.value+1
             list.add("("+cnt.value.toString()+")"+min.value+":"+sec.value+"."+time.value)
-
-            //val result = list.joinToString(separator = " ") // 리스트를 문자열로 변환
 
         }
 

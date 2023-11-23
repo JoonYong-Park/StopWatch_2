@@ -23,7 +23,7 @@ fun GreetingPreview() {
 // MainActivity 클래스 정의
 class MainActivity : ComponentActivity() {
 
-    private val stopwatchviewmodel by viewModels<StopWatchViewM>()
+    private val stopwatchviewmodel by viewModels<StopWatchViewModel>()
 
     // onCreate: 집입점(JAVA의 main() 함수와 비슷)
     override fun onCreate(savedInstanceState: Bundle?) {

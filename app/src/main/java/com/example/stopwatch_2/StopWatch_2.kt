@@ -8,6 +8,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,12 +25,12 @@ import androidx.compose.ui.unit.sp
 @Preview(showBackground = true)
 @Composable
 fun StopwatchView() {
-    StopWatch(stopWatchViewM = StopWatchViewM())
+    StopWatch(stopWatchViewM = StopWatchViewModel())
 }
 
 @Composable
 fun StopWatch(
-    stopWatchViewM: StopWatchViewM,
+    stopWatchViewM: StopWatchViewModel,
     modifier: Modifier = Modifier
 ) {
     // Column: 세로로 배치
@@ -70,7 +73,7 @@ fun StopWatch(
                     .padding(10.dp),
             )
             {
-                Text(text = stopWatchViewM.start.value,
+                Text(text = stopWatchViewM.start,
                     modifier = Modifier,
                     fontSize = 25.sp
                 )
@@ -86,13 +89,15 @@ fun StopWatch(
 
             )
             {
-                Text(text = stopWatchViewM.reset.value,
+                Text(text = stopWatchViewM.reset,
                     modifier = Modifier,
                     fontSize = 25.sp
                 )
             }
         }
-         Text(
+
+        // 탭(Text 버전) - 스크롤 불가능
+         /*Text(
              text = stopWatchViewM.list.toString()
                  .replace("[","")
                  .replace("]","")
@@ -100,8 +105,27 @@ fun StopWatch(
                  .split(" ")
                  .joinToString(separator = "\n")
              , fontSize = 20.sp
-         ) // 랩타임 출력
-         //String[] splits =  s.replace("[","").replace("]","").split(",");
+         )*/
+
+        // 탭(LazyColumn 버전) - 스크롤 가능
+        LazyColumn(content = {
+            items(stopWatchViewM.cnt.value){ index ->
+                Text(text = stopWatchViewM.list[index])
+            }
+        })
+
+        // 탭(Column 스크롤 버전)
+        /*Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.CenterVertically)
+        ) {
+            stopWatchViewM.list.forEachIndexed { index, recordTime ->
+                Text(text = recordTime)
+            }
+        }*/
     }
 
 
